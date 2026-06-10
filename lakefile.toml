@@ -1,0 +1,19 @@
+name = "satreadout"
+defaultTargets = ["SatReadout"]
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.28.0"
+
+[[lean_lib]]
+name = "SatReadout"
+
+[[lean_lib]]
+name = "AristotleQ1"
+
+[[lean_lib]]
+name = "AristotleQ2"
+
+[[lean_lib]]
+name = "AristotleQ3"
