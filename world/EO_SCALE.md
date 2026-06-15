@@ -39,5 +39,24 @@ two Sentinel-2 windows (winter `S2C…20260113` 0.005% cloud, spring
    `commit` carries a per-substrate, data-fit `Â` (EO-space), per the
    magenta/Color lesson: no universal scale, one `Â` per context.
 
-Tolerance is **partially established** (lower structure measured from real device
-data); full identification gated on the two −1's above. Loop continues.
+## ESTABLISHED (real device data, both −1's resolved)
+
+Crop bug fixed (window centered at lat/lon). Heterogeneous Ocean Beach scout
+(`ocean_beach.bin`, centered) gave within-scene distances spanning 0.0001→0.161
+(ocean↔ocean → ocean↔urban) — the missing upper anchor. Fit:
+
+| param | value (EO-Nano cos-dist units) | source |
+|---|---|---|
+| `Â` (clearly-different / saturation) | **0.1537** | ocean↔urban, p95 |
+| `a` (same/maybe) | **0.0120** | 8× uniform-ocean floor (0.0015) |
+| `b` (maybe/different) | **0.1011** | Otsu valley of the bimodal distribution |
+| `idtol = 64·ε·Â` | **2.18e-15** | bridge bound at the fitted scale |
+
+Regime sanity (all correct, MEASURED): uniform-ocean 0.0007→SAME ·
+seasonal shift 0.066→MAYBE (ambiguous, not land-cover change) ·
+ocean↔urban 0.154→DIFFERENT. Synthetic `A=0.45` → device-fit **0.1537**.
+
+**Tolerance is established from a real device** (Sentinel-2/OlmoEarth = the
+available discrimination device). Loop's remaining gate: EXPRESS this grounded
+`Â` as a Lean4 Anoma/Geb intent (`ToleranceIntent.lean`, tick 2) — the `commit`
+carries `Â=0.1537` (EO-space), per the magenta/Color lesson: one `Â` per context.
