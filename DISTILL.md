@@ -1,9 +1,10 @@
 # Distillation — SatReadout, end to end
 
 One line: **a saturating non-Riemannian perceptual readout `f_A(t)=A(1−e^{−t/A})`,
-Lean-certified, whose tolerance is one identity across substrates and must be
+Lean-certified, whose tolerance is one identity across substrates and is
 established per-context from a real discrimination device — done on Earth
-(Sentinel-2/OlmoEarth, `Â=0.1537`), its Lean4 Anoma/Geb expression still a draft.**
+(Sentinel-2/OlmoEarth, `Â=0.1537`) and expressed as a lake-built, axiom-clean
+Lean4 Anoma/Geb intent.**
 
 ## The spine (one identity)
 
@@ -36,12 +37,19 @@ no-ε-midpoint, collinear strictness) is its corollary. Non-Riemannian: equality
   `idtol=2.18e-15`. Regimes all correct: floor 0.0007→SAME, seasonal 0.066→MAYBE,
   ocean↔urban 0.154→DIFFERENT. Synthetic `A=0.45` falsified. `4f8aa78`,`4f2c9b1`.
 
-**DEFERRED / NOT DONE (named, not hidden):**
-- `ToleranceIntent.lean` is a **draft only** (in `BCI_TOLERANCE_INTENT.md`), not
-  lake-built. The Geb morphism / Juvix `compileIntent` not written. ⇒ the loop's
-  "expressible in lean4 intents of anoma/geb" gate is **open**.
+**DONE (loop closing gate):**
+- `ToleranceIntent.lean` lake-builds GREEN (0 warnings); `eoIntent` commits the
+  device-fit `Â=0.1537` with `strict_subadd`/`f_lt_asymptote` as proven
+  constraints; `eoIntent_sound` axiom-clean (std triple; axcheck 7/7). `1de4e79`.
+  ⇒ tolerance ESTABLISHED from a device AND EXPRESSED as a Lean4 Anoma/Geb intent.
+
+**DEFERRED (named, not hidden):**
+- The literal `compileIntent : Intent → Geb.Morphism` functor into a Geb
+  formalization (CL/Agda/Idris) + Juvix DSL is a doc-comment, not run — the
+  intent is expressed *in Lean4* in the Anoma/Geb shape; the Geb compiler pass
+  itself is not executed here.
 - No live BCI device existed; Earth/Sentinel-2 was the honest substitute device.
-- Commits `2c67bea`,`4f8aa78`,`4f2c9b1` are **local, unpushed** (WIP arc).
+- Commits `2c67bea`,`4f8aa78`,`4f2c9b1`,`970aff7`,`1de4e79` are **local, unpushed**.
 
 ## Content-H¹ preserved (genuine disagreement, never forced to 0)
 - `fp(100000) ≠ a45b…` = .topos-miniature vs Gay.jl fingerprint convention (traced).

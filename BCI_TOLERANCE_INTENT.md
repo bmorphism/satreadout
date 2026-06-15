@@ -88,11 +88,13 @@ whose `identifiable` witness the fit discharged.
 ## Tick plan (loop: "until tolerance CAN BE established")
 
 - [x] tick 1 — orient 3 pillars; data contract; this spine; GF(3) reading.
-- [ ] tick 2 — `ToleranceIntent.lean` lake-builds green against SatReadout v4.28.
-- [ ] tick 3 — run `satfit` on synthetic-BCI trits; emit `Â`, `idtol`, R1 cert;
-      wire `Â` into the intent's `commit`.
-- [ ] tick 4 — `compileIntent → Geb.Morphism` (Common Lisp / geb-agda); Juvix
-      intent DSL; measured GF(3) Σ≡0; define the device plug-in point.
+- [x] tick 2 — `ToleranceIntent.lean` lake-builds GREEN (0 warn) against SatReadout
+      v4.28; `eoIntent_sound` axiom-clean (std triple, axcheck 7/7). `1de4e79`.
+- [x] tick 3 — discrimination data sourced from EARTH (Sentinel-2/OlmoEarth), not
+      synthetic-BCI: `eo_trit.bb` + Ocean Beach scout → `Â=0.1537` fit from real
+      device data (world/EO_SCALE.md); wired into `eoIntent.commit`. `4f2c9b1`.
+- [ ] tick 4 (DEFERRED) — literal `compileIntent → Geb.Morphism` (CL/geb-agda) +
+      Juvix DSL; a live BCI device at the plug-in point (Earth was the substitute).
 
 ## Standing −1 (do not hide)
 
