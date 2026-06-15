@@ -10,6 +10,9 @@ rev = "v4.28.0"
 name = "SatReadout"
 
 [[lean_lib]]
+name = "ToleranceIntent"
+
+[[lean_lib]]
 name = "AristotleQ1"
 
 [[lean_lib]]
