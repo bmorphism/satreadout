@@ -13,6 +13,9 @@ name = "SatReadout"
 name = "ToleranceIntent"
 
 [[lean_lib]]
+name = "SatReadoutGeodesic"
+
+[[lean_lib]]
 name = "AristotleQ1"
 
 [[lean_lib]]

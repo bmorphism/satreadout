@@ -43,6 +43,17 @@ no-ε-midpoint, collinear strictness) is its corollary. Non-Riemannian: equality
   constraints; `eoIntent_sound` axiom-clean (std triple; axcheck 7/7). `1de4e79`.
   ⇒ tolerance ESTABLISHED from a device AND EXPRESSED as a Lean4 Anoma/Geb intent.
 
+**NEW — Riemannian-exclusion no longer prose (`SatReadoutGeodesic.lean`):**
+- The 2026-06-10 note "mathlib has no length/geodesic theory ⇒ exclusion stays
+  prose" is SUPERSEDED — `dist_add_dist_eq_iff`, `dist_left/right_midpoint`,
+  `Wbtw` are present in our pinned mathlib v4.28.0 (verified against source, no
+  bump). Two theorems, lake-build GREEN (0 warn), axiom-clean (std triple, 9/9):
+  `collinear_strict_wbtw` (strict super-additivity over `Wbtw`-between points) and
+  `satDist_breaks_geodesic` (base has a midpoint, `satDist` has none — `f∘dist`
+  destroys the geodesic structure). Confirmed via DeepWiki: `concave⇒subadditive`
+  still absent from mathlib (PR stands); Geb morphism machinery present
+  (`compileIntent` realizable). (introduced this commit — see `git log`.)
+
 **DEFERRED (named, not hidden):**
 - The literal `compileIntent : Intent → Geb.Morphism` functor into a Geb
   formalization (CL/Agda/Idris) + Juvix DSL is a doc-comment, not run — the
