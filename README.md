@@ -22,6 +22,7 @@ and ordinary-`ℝ`-is-geodesic contrast are also machine-checked.)
 | `SatReadout.lean` | `f`, KEY identity `key_identity'`, `strict_subadd`, saturation `f_lt_asymptote`, the metric layer `satDist`/`satPseudoMetricSpace`, `no_midpoint`, `no_eps_midpoint`, `collinear_strict` |
 | `SatReadoutGeodesic.lean` | `collinear_strict_wbtw` (in mathlib `Wbtw` terms), **`satDist_breaks_geodesic`** (no-midpoint obstruction) |
 | `SatReadoutNotGeodesic.lean` | `IsGeodesicMetric`/`IsLengthMetric` defs + **`satDist_not_geodesic`** and **`satDist_not_length_metric`** — `satDist` is provably not geodesic and not even intrinsic (`ℝ` is geodesic; `satDist` isn't). The formal "non-Riemannian", Hopf–Rinow-free. |
+| `SatReadoutAtlas.lean` | two-chart readout `atlas2 = w·f_a + (1-w)·f_b` plus finite atlas `atlasN = Σᵢ wᵢ·f_{aᵢ}`; exact weighted defects, first-order rawness at 0 for `atlas2`, boundedness, strict subadditivity, atlas pseudometrics, and atlas collinear strictness |
 | `AristotleQ1.lean` | `StrictConcaveOn.subadditive_of_map_zero` (the convexity route) |
 | `AristotleQ2.lean` | `satPseudoMetricSpace_uniformity` (T4: uniformity agrees with ambient) |
 | `AristotleQ3.lean` | the resident falsifier: the unquantified ε-bound is *disproved* (`no_eps_midpoint_without_quadratic_bound_is_false`) |
@@ -41,7 +42,7 @@ magenta's opponent complement "−green"). See `world/x11_magenta_strangeness.ht
 
 ## Verify
 ```
-lake build SatReadout AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic
+lake build SatReadout SatReadoutAtlas AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic SatReadoutNotGeodesic
 lake env lean axcheck.lean   # axiom gate: all on propext/Classical.choice/Quot.sound
 ```
 CI (`proof-health.yml`) runs both on every push; the blueprint

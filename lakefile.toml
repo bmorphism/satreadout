@@ -19,6 +19,9 @@ name = "SatReadoutGeodesic"
 name = "SatReadoutNotGeodesic"
 
 [[lean_lib]]
+name = "SatReadoutAtlas"
+
+[[lean_lib]]
 name = "AristotleQ1"
 
 [[lean_lib]]

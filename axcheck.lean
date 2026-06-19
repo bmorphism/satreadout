@@ -5,6 +5,7 @@ import AristotleQ3
 import ToleranceIntent
 import SatReadoutGeodesic
 import SatReadoutNotGeodesic
+import SatReadoutAtlas
 #print axioms SatReadout.key_identity'
 #print axioms SatReadout.no_midpoint
 #print axioms StrictConcaveOn.subadditive_of_map_zero
@@ -16,3 +17,7 @@ import SatReadoutNotGeodesic
 #print axioms SatReadout.satDist_breaks_geodesic
 #print axioms satDist_not_geodesic
 #print axioms satDist_not_length_metric
+#print axioms SatReadout.atlas2_defect
+#print axioms SatReadout.atlas2_collinear_strict
+#print axioms SatReadout.atlasN_defect
+#print axioms SatReadout.atlasN_collinear_strict

@@ -54,6 +54,19 @@ no-ε-midpoint, collinear strictness) is its corollary. Non-Riemannian: equality
   still absent from mathlib (PR stands); Geb morphism machinery present
   (`compileIntent` realizable). (introduced this commit — see `git log`.)
 
+**NEW — atlas/ensemble readouts keep the gate (`SatReadoutAtlas.lean`):**
+- The MLX color-space experiments suggested chart mixtures: raw RGB/logit/OKLab,
+  smooth-vs-caustic routing, and convex ensembles. The Lean contribution isolates
+  the invariant: `atlas2 a b w t = w·f_a(t) + (1-w)·f_b(t)` has exact weighted
+  defect, derivative `1` at `0`, bounded weighted asymptote, strict subadditivity,
+  a `satAtlasDist` pseudometric, and collinear strictness. The finite form
+  `atlasN = Σᵢ wᵢ·f_{aᵢ}` has the same weighted-defect, subadditivity,
+  pseudometric, and collinear strictness theorems whenever the weights are
+  nonnegative and at least one chart is active. Hence local/ensemble readouts do
+  **not** recover Riemannian additivity; the non-Riemannian gate is stable under
+  the useful atlas operations. Lake-build GREEN and axiom gate unchanged
+  (`propext/Classical.choice/Quot.sound`) this session.
+
 **DEFERRED (named, not hidden):**
 - The literal `compileIntent : Intent → Geb.Morphism` functor into a Geb
   formalization (CL/Agda/Idris) + Juvix DSL is a doc-comment, not run — the
