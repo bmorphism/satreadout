@@ -15,3 +15,4 @@ import SatReadoutNotGeodesic
 #print axioms SatReadout.collinear_strict_wbtw
 #print axioms SatReadout.satDist_breaks_geodesic
 #print axioms satDist_not_geodesic
+#print axioms satDist_not_length_metric

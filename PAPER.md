@@ -36,11 +36,16 @@ Let `(X, d)` be a metric space and `a > 0`. Define the **saturating readout**
   (satDist_a)` — because every geodesic metric is midpoint-convex
   (`IsGeodesicMetric.midpointConvex`), which `no_midpoint` refutes. Self-certifying:
   ordinary `ℝ` *is* geodesic (linear segment), `satDist` is not.
+- **Not even a length metric** (`satDist_not_length_metric`): with `IsLengthMetric`
+  the *intrinsic* condition (approximate midpoints for every `ε>0`),
+  `¬ IsLengthMetric (satDist_a)` — `satDist` has no approximate midpoints, via the
+  quantitative `no_eps_midpoint`. Strictly stronger than non-geodesic.
 
-By Hopf–Rinow, a complete Riemannian metric is geodesic; hence `satDist_a` is the
-distance of no complete Riemannian structure. **This is "non-Riemannian," now a
-theorem rather than an inference** — the only classical step is the named
-Hopf–Rinow direction.
+A Riemannian distance **is** a length metric *by definition* (the infimum of path
+lengths is intrinsic), so `satDist_a` is the distance of no Riemannian structure.
+**This is "non-Riemannian," now a theorem with no appeal to Hopf–Rinow** — the only
+remaining classical input is the definitional identity "Riemannian distance = length
+metric," far weaker than the geodesic completeness Hopf–Rinow would require.
 
 ## 2. The empirical premise (not formalized, by design)
 The Lean proves the *geometry of the readout*; the bridge to human vision —

@@ -58,3 +58,37 @@ theorem satDist_not_geodesic {X : Type*} [MetricSpace X] [Nontrivial X]
   intro h
   obtain ⟨p, q, hpq⟩ := exists_pair_ne X
   exact no_midpoint ha hpq (h.midpointConvex p q hpq)
+
+/-- A metric is a *length (intrinsic) metric* if every pair has approximate
+midpoints: for every `ε>0` some point is within `ε` of half the distance from
+both. A Riemannian distance IS such a metric by definition (the infimum of path
+lengths), so this is the most elementary form of the comparison — no Hopf–Rinow. -/
+def IsLengthMetric {X : Type*} [MetricSpace X] (D : X → X → ℝ) : Prop :=
+  ∀ p q : X, ∀ ε : ℝ, 0 < ε → ∃ m, D p m ≤ D p q / 2 + ε ∧ D m q ≤ D p q / 2 + ε
+
+/-- **The saturated perceptual metric is not even a length metric** — strictly
+stronger than `satDist_not_geodesic`. It has no approximate midpoints
+(`no_eps_midpoint`), so it is not intrinsic; and since a Riemannian distance is a
+length metric *by definition*, `satDist` is non-Riemannian with NO appeal to
+Hopf–Rinow. -/
+theorem satDist_not_length_metric {X : Type*} [MetricSpace X] [Nontrivial X]
+    {a : ℝ} (ha : 0 < a) : ¬ IsLengthMetric (X := X) (satDist a) := by
+  intro h
+  obtain ⟨p, q, hpq⟩ := exists_pair_ne X
+  have hDpos : 0 < satDist a p q := f_pos ha (dist_pos.mpr hpq)
+  have hDlt : satDist a p q < a := f_lt_asymptote ha
+  have ha' : a ≠ 0 := ne_of_gt ha
+  obtain ⟨m, hm1, hm2⟩ := h p q (satDist a p q ^ 2 / (16 * a)) (by positivity)
+  refine no_eps_midpoint ha hpq (by positivity) ?_ ?_ ⟨m, hm1, hm2⟩
+  · rw [div_le_iff₀ (by positivity : (0:ℝ) < 16 * a)]
+    nlinarith [mul_lt_mul_of_pos_left hDlt hDpos, mul_pos hDpos ha, ha, hDpos]
+  · have num_pos : (0:ℝ) < (8 * a - satDist a p q) ^ 2 - 32 * a ^ 2 := by
+      nlinarith [mul_pos ha (sub_pos.mpr hDlt), sq_nonneg (satDist a p q), sq_nonneg a]
+    have e : (satDist a p q / 2 - satDist a p q ^ 2 / (16 * a)) ^ 2
+             - 2 * a * (satDist a p q ^ 2 / (16 * a))
+           = satDist a p q ^ 2 * ((8 * a - satDist a p q) ^ 2 - 32 * a ^ 2) / (256 * a ^ 2) := by
+      field_simp; ring
+    have pos : (0:ℝ) < (satDist a p q / 2 - satDist a p q ^ 2 / (16 * a)) ^ 2
+                        - 2 * a * (satDist a p q ^ 2 / (16 * a)) := by
+      rw [e]; exact div_pos (mul_pos (pow_pos hDpos 2) num_pos) (by positivity)
+    linarith [pos]

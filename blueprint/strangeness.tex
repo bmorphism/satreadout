@@ -103,6 +103,16 @@ Hopf--Rinow a complete Riemannian metric is geodesic; hence $\mathrm{satDist}_a$
 is the distance of no complete Riemannian structure.
 \end{theorem}
 
+\begin{theorem}[Not even a length metric — Hopf--Rinow-free]\label{thm:notlen}
+\lean{satDist_not_length_metric}\uses{thm:nomid}\leanok
+Call a metric \emph{intrinsic / length} if every pair has approximate midpoints for
+every $\varepsilon>0$ (\lean{IsLengthMetric}). Then $\mathrm{satDist}_a$ is not a
+length metric --- it has no approximate midpoints, by the quantitative
+\lean{SatReadout.no_eps_midpoint}. This is strictly stronger than \cref{thm:notgeo}.
+A Riemannian distance \emph{is} a length metric by definition, so this yields
+non-Riemannian with \emph{no} Hopf--Rinow.
+\end{theorem}
+
 \begin{corollary}[Strangeness is monotone and bounded]\label{cor:strange}
 \uses{thm:break}
 Define strangeness of a pair as $\Delta E / f_a(\Delta E)$ (Riemannian vs.\ readout
@@ -124,12 +134,14 @@ $\mathrm{satDist}_a$. Two boundaries, both named:
 \item \textbf{Empirical (not a theorem, by design).} The bridge to human vision is
 \cref{hyp:bujack} alone — that perception \emph{is} a saturating readout. Data may
 refine or refute it; it is never \leanok.
-\item \textbf{Classical, now reduced to one named theorem.} \cref{thm:notgeo}
-machine-checks that $\mathrm{satDist}_a$ is \emph{not geodesic}. The only step from
-there to the word ``Riemannian'' is \emph{Hopf--Rinow} (complete Riemannian $\Rightarrow$
-geodesic) — a precise, famous theorem, not hand-waving. Formalizing a general
-geodesic/length-space typeclass and Hopf--Rinow would erase even this.
+\item \textbf{Classical, now reduced to a definition.} \cref{thm:notlen}
+machine-checks that $\mathrm{satDist}_a$ is \emph{not a length metric}. The only
+step from there to ``Riemannian'' is the \emph{definitional} identity ``a Riemannian
+distance is the infimum of path lengths, hence intrinsic/length'' --- not a theorem
+to invoke but a definition. (The weaker \cref{thm:notgeo} would route through
+Hopf--Rinow; \cref{thm:notlen} avoids it.)
 \end{itemize}
 Precise formalized statement: \emph{if} perceptual difference is a saturating
-readout (\cref{hyp:bujack}), \emph{then} perceptual color space is a non-geodesic
-metric (\cref{thm:notgeo}, machine-checked), hence — by Hopf--Rinow — non-Riemannian.
+readout (\cref{hyp:bujack}), \emph{then} perceptual color space is not a length
+metric (\cref{thm:notlen}, machine-checked), hence --- since Riemannian distance is
+length by definition --- non-Riemannian.
