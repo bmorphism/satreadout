@@ -92,6 +92,17 @@ midpoints; therefore $f_a\circ\mathrm{dist}$ is not a length metric, a fortiori
 not Riemannian.
 \end{theorem}
 
+\begin{theorem}[Not a geodesic metric — the formal non-Riemannian]\label{thm:notgeo}
+\lean{satDist_not_geodesic}\uses{thm:nomid}\leanok
+Call a metric \emph{geodesic} if every pair is joined by a metric segment
+(\lean{IsGeodesicMetric}; ordinary $\mathbb{R}$ is, via $t\mapsto(1-t)p+tq$). For
+any metric space with $\ge 2$ points and $0<a$, $\mathrm{satDist}_a$ is \emph{not}
+geodesic: every geodesic metric is midpoint-convex
+(\lean{IsGeodesicMetric.midpointConvex}), which \cref{thm:nomid} refutes. By
+Hopf--Rinow a complete Riemannian metric is geodesic; hence $\mathrm{satDist}_a$
+is the distance of no complete Riemannian structure.
+\end{theorem}
+
 \begin{corollary}[Strangeness is monotone and bounded]\label{cor:strange}
 \uses{thm:break}
 Define strangeness of a pair as $\Delta E / f_a(\Delta E)$ (Riemannian vs.\ readout
@@ -108,10 +119,17 @@ where the Riemannian ruler is most confidently wrong.
 \subsection{What is formal, and what is not}
 The Lean development proves the \emph{geometry of the saturating readout}:
 \cref{def:f}--\cref{cor:strange} are unconditional theorems about $f_a$ and
-$\mathrm{satDist}_a$. The bridge to human vision is \cref{hyp:bujack} alone — an
-empirical premise (which discrimination data may refine or refute), never a
-theorem. Thus the precise formalized statement is: \emph{if} perceptual difference
-is a saturating readout (\cref{hyp:bujack}), \emph{then} perceptual color space is
-provably non-Riemannian (\cref{thm:break}). The Bujack et al.\ PNAS 2022 result is
-the evidence for the antecedent; \cref{thm:break} is the (now machine-checked)
-consequent.
+$\mathrm{satDist}_a$. Two boundaries, both named:
+\begin{itemize}
+\item \textbf{Empirical (not a theorem, by design).} The bridge to human vision is
+\cref{hyp:bujack} alone — that perception \emph{is} a saturating readout. Data may
+refine or refute it; it is never \leanok.
+\item \textbf{Classical, now reduced to one named theorem.} \cref{thm:notgeo}
+machine-checks that $\mathrm{satDist}_a$ is \emph{not geodesic}. The only step from
+there to the word ``Riemannian'' is \emph{Hopf--Rinow} (complete Riemannian $\Rightarrow$
+geodesic) — a precise, famous theorem, not hand-waving. Formalizing a general
+geodesic/length-space typeclass and Hopf--Rinow would erase even this.
+\end{itemize}
+Precise formalized statement: \emph{if} perceptual difference is a saturating
+readout (\cref{hyp:bujack}), \emph{then} perceptual color space is a non-geodesic
+metric (\cref{thm:notgeo}, machine-checked), hence — by Hopf--Rinow — non-Riemannian.
