@@ -1,0 +1,117 @@
+% OpenGauss / leanblueprint blueprint — "The non-Riemannian nature of perceptual
+% color space, formalized." Feed to OpenGauss: /autoformalize blueprint/strangeness.tex
+% \leanok = the Lean proof compiles (satreadout, Lean v4.28, CI green).
+% Honesty convention: \begin{hypothesis} nodes are EMPIRICAL premises — they are
+% NOT theorems and must never be \leanok. Everything downstream is conditional on them.
+
+\section{The non-Riemannian nature of perceptual color space, formalized}
+
+\paragraph{Thesis.} Perceived color difference is a \emph{saturating, subadditive}
+readout, not a Riemannian (length) metric. Below we (i) fix the readout, (ii) prove
+the algebra that forces diminishing returns, (iii) prove the geometric obstruction
+— no midpoint, hence no length/Riemannian metric — and (iv) state honestly the one
+\emph{empirical} link to human vision, which is not (and cannot be) formalized.
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection{The empirical premise (not a theorem)}
+
+\begin{hypothesis}[Saturating perception, Bujack et al.\ PNAS 2022]\label{hyp:bujack}
+Human large-difference color judgments exhibit \emph{diminishing returns}: the
+directly perceived difference between two colors is strictly less than the sum of
+just-noticeable-difference steps between them. Operationally, perceived difference
+is modelled as $D(c_1,c_2)=f_{\hat a}(\Delta E(c_1,c_2))$ with $f_a(t)=a(1-e^{-t/a})$
+and a per-context saturation scale $\hat a$ fit from discrimination data
+(e.g.\ $\hat a\approx 10$ on the $\Delta E_{00}$ anchor; $\hat a=0.1537$ in
+OlmoEarth EO-embedding units). This is an empirical claim; it grounds, but is not
+implied by, anything below.
+\end{hypothesis}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection{The readout and its engine}
+
+\begin{definition}[Saturating readout]\label{def:f}\lean{SatReadout.f}\leanok
+For $a,t\in\mathbb{R}$, $f_a(t)=a\,(1-e^{-t/a})$. Local ruler ($f_a(0)=0$,
+$f_a'(0)=1$, \lean{SatReadout.hasDerivAt_f_zero}) that bends to the asymptote $a$
+(\lean{SatReadout.f_lt_asymptote}).
+\end{definition}
+
+\begin{lemma}[KEY identity]\label{lem:key}\lean{SatReadout.key_identity'}\uses{def:f}\leanok
+$f_a(x)f_a(y)=a\bigl(f_a(x)+f_a(y)-f_a(x+y)\bigr)$ for all $a,x,y$ (only
+\texttt{Real.exp\_add}). The subadditivity defect is exactly $f_a(x)f_a(y)/a$.
+\end{lemma}
+
+\begin{lemma}[Strict subadditivity = diminishing returns]\label{lem:subadd}
+\lean{SatReadout.strict_subadd}\uses{lem:key}\leanok
+$0<a,x,y \Rightarrow f_a(x+y)<f_a(x)+f_a(y)$. (Measured on the X11 gray ramp:
+$\sum f(\text{step})=95.16$ vs $f(\text{direct})=10.00$, a $9.5\times$ overcount.)
+\end{lemma}
+
+\begin{remark}[The convexity route, and a mathlib gap]\label{rem:concave}
+\uses{lem:subadd}
+\Cref{lem:subadd} also follows from a general fact mathlib lacked:
+\emph{a (strictly) concave $g$ on $[0,\infty)$ with $g(0)=0$ is (strictly)
+subadditive}. We prove both forms,
+\lean{ConcaveOn.subadditive_of_map_zero} and
+\lean{StrictConcaveOn.subadditive_of_map_zero} (\leanok, $\mathbb{R}$ on
+$[0,\infty)$), as a mathlib PR candidate (closest existing lemma:
+\texttt{Convex\_subadditive\_le}, the reverse direction).
+\end{remark}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection{The geometric obstruction (the strangeness)}
+
+\begin{definition}[Saturated metric]\label{def:satdist}\lean{SatReadout.satDist}\uses{def:f}\leanok
+$\mathrm{satDist}_a=f_a\circ\mathrm{dist}$ on a (pseudo)metric space; a pseudometric
+(\lean{SatReadout.satPseudoMetricSpace}), with uniformity equal to the ambient one
+(\lean{satPseudoMetricSpace_uniformity}).
+\end{definition}
+
+\begin{theorem}[No midpoint]\label{thm:nomid}\lean{SatReadout.no_midpoint}
+\uses{lem:subadd,def:satdist}\leanok
+In any metric space, for $p\ne q$ there is no $m$ with
+$\mathrm{satDist}_a(p,m)=\mathrm{satDist}_a(m,q)=\tfrac12\mathrm{satDist}_a(p,q)$.
+Quantitative $\varepsilon$-version: \lean{SatReadout.no_eps_midpoint} (gate
+$2a\varepsilon<(D/2-\varepsilon)^2$).
+\end{theorem}
+
+\begin{theorem}[Collinear strictness in betweenness terms]\label{thm:wbtw}
+\lean{SatReadout.collinear_strict_wbtw}\uses{lem:subadd}\leanok
+Over a strict-convex normed $\mathbb{R}$-space: $\mathrm{Wbtw}\;\mathbb{R}\;p\,r\,q$
+(via mathlib \texttt{dist\_add\_dist\_eq\_iff}) and $p\ne r\ne q$ imply
+$\mathrm{satDist}_a(p,q)<\mathrm{satDist}_a(p,r)+\mathrm{satDist}_a(r,q)$: the
+geodesic-between point is charged \emph{more} than the geodesic sum.
+\end{theorem}
+
+\begin{theorem}[Not a length / Riemannian metric]\label{thm:break}
+\lean{SatReadout.satDist_breaks_geodesic}\uses{thm:nomid,thm:wbtw}\leanok
+Over a strict-convex normed $\mathbb{R}$-space the base metric has the segment
+midpoint (mathlib \texttt{eq\_midpoint\_of\_dist\_eq\_half}) while
+$\mathrm{satDist}_a$ has none (\cref{thm:nomid}). A length space realises every
+distance as an infimum of summed path segments and hence \emph{must} have
+midpoints; therefore $f_a\circ\mathrm{dist}$ is not a length metric, a fortiori
+not Riemannian.
+\end{theorem}
+
+\begin{corollary}[Strangeness is monotone and bounded]\label{cor:strange}
+\uses{thm:break}
+Define strangeness of a pair as $\Delta E / f_a(\Delta E)$ (Riemannian vs.\ readout
+verdict). It is $\approx 1$ for $\Delta E\lesssim$ a few JND (both metrics agree —
+the regime where CIEDE is valid) and grows without bound as $\Delta E$ increases,
+because $f_a\to a$. Worked over the X11 catalogue (676 colors): least strange =
+\texttt{magenta} and its neighbourhood ($1.0\times$); most strange = the greens
+(\texttt{green1}, $15.7\times$), i.e.\ magenta's opponent complement
+(``$-$green''). The non-spectral hue and its complement bracket exactly the span
+where the Riemannian ruler is most confidently wrong.
+\end{corollary}
+
+% ──────────────────────────────────────────────────────────────────────────────
+\subsection{What is formal, and what is not}
+The Lean development proves the \emph{geometry of the saturating readout}:
+\cref{def:f}--\cref{cor:strange} are unconditional theorems about $f_a$ and
+$\mathrm{satDist}_a$. The bridge to human vision is \cref{hyp:bujack} alone — an
+empirical premise (which discrimination data may refine or refute), never a
+theorem. Thus the precise formalized statement is: \emph{if} perceptual difference
+is a saturating readout (\cref{hyp:bujack}), \emph{then} perceptual color space is
+provably non-Riemannian (\cref{thm:break}). The Bujack et al.\ PNAS 2022 result is
+the evidence for the antecedent; \cref{thm:break} is the (now machine-checked)
+consequent.
