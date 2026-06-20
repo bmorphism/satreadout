@@ -61,5 +61,5 @@ jobs:
           echo "| trit | gate | status |" >> "$GITHUB_STEP_SUMMARY"
           echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
           echo "| +1 | build 4 targets | green |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| 0 | axioms = std triple, 17/17 theorems | green |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 0 | axioms = std triple, 22/22 theorems | green |" >> "$GITHUB_STEP_SUMMARY"
           echo "| −1 | falsifier compiles, zero sorries | green |" >> "$GITHUB_STEP_SUMMARY"
