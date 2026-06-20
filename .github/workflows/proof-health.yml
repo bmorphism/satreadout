@@ -24,12 +24,12 @@ jobs:
         uses: leanprover/lean-action@v1
         with:
           use-mathlib-cache: true
-          build-args: "SatReadout AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic SatReadoutNotGeodesic"
+          build-args: "SatReadout AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic SatReadoutNotGeodesic SatReadoutAtlas"
 
       - name: no live sorries (−1 Coplay, part 1)
         run: |
           set -euo pipefail
-          OUT=$(~/.elan/bin/lake build SatReadout AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic SatReadoutNotGeodesic 2>&1 || true)
+          OUT=$(~/.elan/bin/lake build SatReadout AristotleQ1 AristotleQ2 AristotleQ3 ToleranceIntent SatReadoutGeodesic SatReadoutNotGeodesic SatReadoutAtlas 2>&1 || true)
           echo "$OUT" | tail -5
           if echo "$OUT" | grep -q "uses 'sorry'"; then
             echo "::error::live sorry detected"; exit 1
@@ -61,5 +61,5 @@ jobs:
           echo "| trit | gate | status |" >> "$GITHUB_STEP_SUMMARY"
           echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
           echo "| +1 | build 4 targets | green |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| 0 | axioms = std triple, 11/11 theorems | green |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 0 | axioms = std triple, 15/15 theorems | green |" >> "$GITHUB_STEP_SUMMARY"
           echo "| −1 | falsifier compiles, zero sorries | green |" >> "$GITHUB_STEP_SUMMARY"
