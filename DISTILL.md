@@ -60,11 +60,13 @@ no-ε-midpoint, collinear strictness) is its corollary. Non-Riemannian: equality
   the invariant: `atlas2 a b w t = w·f_a(t) + (1-w)·f_b(t)` has exact weighted
   defect, derivative `1` at `0`, bounded weighted asymptote, strict subadditivity,
   a `satAtlasDist` pseudometric, and collinear strictness. The finite form
-  `atlasN = Σᵢ wᵢ·f_{aᵢ}` has the same weighted-defect, subadditivity,
-  pseudometric, and collinear strictness theorems whenever the weights are
-  nonnegative and at least one chart is active. Hence local/ensemble readouts do
-  **not** recover Riemannian additivity; the non-Riemannian gate is stable under
-  the useful atlas operations. Lake-build GREEN and axiom gate unchanged
+  `atlasN = Σᵢ wᵢ·f_{aᵢ}` has derivative equal to total weight at `0`, bounded
+  weighted asymptote, and the same weighted-defect, subadditivity, pseudometric,
+  collinear strictness, no-midpoint, and not-geodesic theorems whenever the
+  weights are nonnegative and at least one chart is active. Hence normalized
+  local/ensemble readouts stay first-order raw but do **not** recover Riemannian
+  additivity or metric segments; the non-Riemannian gate is stable under the
+  useful atlas operations. Lake-build GREEN and axiom gate unchanged
   (`propext/Classical.choice/Quot.sound`) this session.
 
 **DEFERRED (named, not hidden):**

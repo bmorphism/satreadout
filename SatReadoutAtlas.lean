@@ -7,7 +7,7 @@ blend of two saturating readouts is still first-order raw at 0, bounded, and
 strictly subadditive on positive increments. In particular, atlas/ensemble
 readouts do not regain the Riemannian equality signature.
 -/
-import SatReadout
+import SatReadoutNotGeodesic
 
 namespace SatReadout
 
@@ -173,12 +173,46 @@ noncomputable def atlasN (scale weight : ι → ℝ) (t : ℝ) : ℝ :=
 @[simp] theorem atlasN_zero : atlasN scale weight 0 = 0 := by
   simp [atlasN]
 
+/-- The derivative at zero is the total atlas weight. Thus normalized finite
+atlases are first-order equal to the raw metric. -/
+theorem hasDerivAt_atlasN_zero (hs : ∀ i, 0 < scale i) :
+    HasDerivAt (atlasN scale weight) (∑ i, weight i) 0 := by
+  unfold atlasN
+  simpa using HasDerivAt.fun_sum (u := Finset.univ)
+    (fun i _ => (hasDerivAt_f_zero (a := scale i) (hs i)).const_mul (weight i))
+
+theorem hasDerivAt_atlasN_zero_of_sum_weight_eq_one
+    (hs : ∀ i, 0 < scale i) (hw_sum : ∑ i, weight i = 1) :
+    HasDerivAt (atlasN scale weight) 1 0 := by
+  simpa [hw_sum] using hasDerivAt_atlasN_zero (scale := scale) (weight := weight) hs
+
 theorem atlasN_nonneg
     (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) (ht : 0 ≤ t) :
     0 ≤ atlasN scale weight t := by
   unfold atlasN
   exact Finset.sum_nonneg fun i _ =>
     mul_nonneg (hw i) (f_nonneg (a := scale i) (hs i) ht)
+
+theorem atlasN_pos
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    {k : ι} (hwk : 0 < weight k) (ht : 0 < t) :
+    0 < atlasN scale weight t := by
+  unfold atlasN
+  exact Finset.sum_pos' (fun i _ =>
+    mul_nonneg (hw i) (f_nonneg (a := scale i) (hs i) ht.le))
+    ⟨k, Finset.mem_univ k, mul_pos hwk (f_pos (a := scale k) (hs k) ht)⟩
+
+/-- A finite atlas saturates below the weighted sum of chart asymptotes. -/
+theorem atlasN_lt_weighted_asymptote
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    {k : ι} (hwk : 0 < weight k) :
+    atlasN scale weight t < ∑ i, weight i * scale i := by
+  unfold atlasN
+  exact Finset.sum_lt_sum
+    (fun i _ => mul_le_mul_of_nonneg_left
+      (le_of_lt (f_lt_asymptote (a := scale i) (t := t) (hs i))) (hw i))
+    ⟨k, Finset.mem_univ k,
+      mul_lt_mul_of_pos_left (f_lt_asymptote (a := scale k) (t := t) (hs k)) hwk⟩
 
 theorem atlasN_monotone
     (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) :
@@ -301,6 +335,63 @@ theorem atlasN_collinear_strict
     rw [h]
   rw [heq]
   exact atlasN_strict_subadd (scale := scale) (weight := weight) hs hw hwk h1 h2
+
+/-- Finite-atlas midpoint exclusion. Even after blending many local readouts,
+no point can split the atlas distance of a distinct pair exactly in half. -/
+theorem satAtlasNDist_no_midpoint
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    {k : ι} (hwk : 0 < weight k) {p q : X} (hpq : p ≠ q) :
+    ¬ ∃ m : X, satAtlasNDist scale weight p m = satAtlasNDist scale weight p q / 2 ∧
+               satAtlasNDist scale weight m q = satAtlasNDist scale weight p q / 2 := by
+  rintro ⟨m, h1, h2⟩
+  have ht : 0 < dist p q := dist_pos.mpr hpq
+  have hDpos : 0 < satAtlasNDist scale weight p q := by
+    exact atlasN_pos (scale := scale) (weight := weight) hs hw hwk ht
+  have htri : dist p q ≤ dist p m + dist m q := dist_triangle p m q
+  have hs1 : 0 < dist p m := by
+    rcases (dist_nonneg : 0 ≤ dist p m).lt_or_eq with hc | hc
+    · exact hc
+    · exfalso
+      have hz : satAtlasNDist scale weight p m = 0 := by
+        unfold satAtlasNDist
+        rw [← hc]
+        simp
+      rw [hz] at h1
+      linarith
+  have hs2 : 0 < dist m q := by
+    rcases (dist_nonneg : 0 ≤ dist m q).lt_or_eq with hc | hc
+    · exact hc
+    · exfalso
+      have hz : satAtlasNDist scale weight m q = 0 := by
+        unfold satAtlasNDist
+        rw [← hc]
+        simp
+      rw [hz] at h2
+      linarith
+  have hsum : atlasN scale weight (dist p m) + atlasN scale weight (dist m q)
+      = atlasN scale weight (dist p q) := by
+    simp only [satAtlasNDist] at h1 h2
+    linarith
+  have hmono : atlasN scale weight (dist p q) ≤
+      atlasN scale weight (dist p m + dist m q) :=
+    atlasN_monotone (scale := scale) (weight := weight) hs hw htri
+  have hstrict : atlasN scale weight (dist p m + dist m q) <
+      atlasN scale weight (dist p m) + atlasN scale weight (dist m q) :=
+    atlasN_strict_subadd (scale := scale) (weight := weight) hs hw hwk hs1 hs2
+  linarith
+
+/-- Finite-atlas geodesic exclusion: one active positive chart is enough to
+destroy metric segments. This is the many-chart analogue of
+`satDist_not_geodesic`. -/
+theorem satAtlasNDist_not_geodesic [Nontrivial X]
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    {k : ι} (hwk : 0 < weight k) :
+    ¬ IsGeodesicMetric (X := X) (satAtlasNDist scale weight) := by
+  intro h
+  obtain ⟨p, q, hpq⟩ := exists_pair_ne X
+  exact satAtlasNDist_no_midpoint
+    (scale := scale) (weight := weight) hs hw hwk hpq
+    (h.midpointConvex p q hpq)
 
 end MetricGates
 

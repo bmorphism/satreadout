@@ -19,5 +19,9 @@ import SatReadoutAtlas
 #print axioms satDist_not_length_metric
 #print axioms SatReadout.atlas2_defect
 #print axioms SatReadout.atlas2_collinear_strict
+#print axioms SatReadout.hasDerivAt_atlasN_zero_of_sum_weight_eq_one
+#print axioms SatReadout.atlasN_lt_weighted_asymptote
 #print axioms SatReadout.atlasN_defect
 #print axioms SatReadout.atlasN_collinear_strict
+#print axioms SatReadout.satAtlasNDist_no_midpoint
+#print axioms SatReadout.satAtlasNDist_not_geodesic
