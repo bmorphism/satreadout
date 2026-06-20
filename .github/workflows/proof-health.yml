@@ -36,6 +36,7 @@ jobs:
           fi
 
       - name: axiom gate (0 Witness)
+        id: axiomgate
         run: |
           set -euo pipefail
           ~/.elan/bin/lake env lean axcheck.lean | tee axioms.txt
@@ -48,6 +49,7 @@ jobs:
           if [ "$N" -lt 6 ]; then
             echo "::error::axiom audit covered $N/6 theorems — axcheck.lean drifted"; exit 1
           fi
+          echo "count=$N" >> "$GITHUB_OUTPUT"
 
       - name: falsifier alive (−1 Coplay, part 2)
         run: |
@@ -60,6 +62,6 @@ jobs:
           echo "## proof-health: Σ ≡ 0" >> "$GITHUB_STEP_SUMMARY"
           echo "| trit | gate | status |" >> "$GITHUB_STEP_SUMMARY"
           echo "|---|---|---|" >> "$GITHUB_STEP_SUMMARY"
-          echo "| +1 | build 4 targets | green |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| 0 | axioms = std triple, 22/22 theorems | green |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| +1 | build all targets | green |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| 0 | axioms = std triple, ${{ steps.axiomgate.outputs.count }} theorems (auto) | green |" >> "$GITHUB_STEP_SUMMARY"
           echo "| −1 | falsifier compiles, zero sorries | green |" >> "$GITHUB_STEP_SUMMARY"
