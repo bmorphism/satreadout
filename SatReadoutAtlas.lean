@@ -214,6 +214,36 @@ theorem atlasN_lt_weighted_asymptote
     ⟨k, Finset.mem_univ k,
       mul_lt_mul_of_pos_left (f_lt_asymptote (a := scale k) (t := t) (hs k)) hwk⟩
 
+/-- A finite atlas never exceeds its total-weight multiple of the raw metric. -/
+theorem atlasN_le_weighted_self
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) :
+    atlasN scale weight t ≤ (∑ i, weight i) * t := by
+  unfold atlasN
+  calc
+    ∑ i, weight i * f (scale i) t
+        ≤ ∑ i, weight i * t := by
+          exact Finset.sum_le_sum fun i _ =>
+            mul_le_mul_of_nonneg_left (f_le_self (a := scale i) (t := t) (hs i)) (hw i)
+    _ = (∑ i, weight i) * t := by
+          rw [Finset.sum_mul]
+
+/-- Normalized finite atlases stay below the raw metric everywhere. -/
+theorem atlasN_le_self_of_sum_weight_eq_one
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    (hw_sum : ∑ i, weight i = 1) :
+    atlasN scale weight t ≤ t := by
+  simpa [hw_sum] using
+    atlasN_le_weighted_self (scale := scale) (weight := weight) (t := t) hs hw
+
+/-- Near zero, a finite atlas keeps the weighted quadratic lower envelope of
+the underlying charts. -/
+theorem atlasN_sq_lower_weighted
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) (ht : 0 ≤ t) :
+    (∑ i, weight i * (t - t ^ 2 / (2 * scale i))) ≤ atlasN scale weight t := by
+  unfold atlasN
+  exact Finset.sum_le_sum fun i _ =>
+    mul_le_mul_of_nonneg_left (sq_lower (a := scale i) (t := t) (hs i) ht) (hw i)
+
 theorem atlasN_monotone
     (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) :
     Monotone (atlasN scale weight) := by

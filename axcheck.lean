@@ -21,6 +21,9 @@ import SatReadoutAtlas
 #print axioms SatReadout.atlas2_collinear_strict
 #print axioms SatReadout.hasDerivAt_atlasN_zero_of_sum_weight_eq_one
 #print axioms SatReadout.atlasN_lt_weighted_asymptote
+#print axioms SatReadout.atlasN_le_weighted_self
+#print axioms SatReadout.atlasN_le_self_of_sum_weight_eq_one
+#print axioms SatReadout.atlasN_sq_lower_weighted
 #print axioms SatReadout.atlasN_defect
 #print axioms SatReadout.atlasN_collinear_strict
 #print axioms SatReadout.satAtlasNDist_no_midpoint
