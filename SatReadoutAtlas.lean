@@ -321,6 +321,28 @@ theorem satAtlasNDist_comm (p q : X) :
     satAtlasNDist scale weight p q = satAtlasNDist scale weight q p := by
   simp [satAtlasNDist, dist_comm]
 
+theorem satAtlasNDist_le_weighted_dist
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) (p q : X) :
+    satAtlasNDist scale weight p q ≤ (∑ i, weight i) * dist p q := by
+  simpa [satAtlasNDist] using
+    atlasN_le_weighted_self (scale := scale) (weight := weight) (t := dist p q) hs hw
+
+theorem satAtlasNDist_le_dist_of_sum_weight_eq_one
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i)
+    (hw_sum : ∑ i, weight i = 1) (p q : X) :
+    satAtlasNDist scale weight p q ≤ dist p q := by
+  simpa [satAtlasNDist] using
+    atlasN_le_self_of_sum_weight_eq_one
+      (scale := scale) (weight := weight) (t := dist p q) hs hw hw_sum
+
+theorem satAtlasNDist_sq_lower_weighted
+    (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) (p q : X) :
+    (∑ i, weight i * (dist p q - dist p q ^ 2 / (2 * scale i))) ≤
+      satAtlasNDist scale weight p q := by
+  simpa [satAtlasNDist] using
+    atlasN_sq_lower_weighted (scale := scale) (weight := weight) (t := dist p q)
+      hs hw (show 0 ≤ dist p q from dist_nonneg)
+
 theorem satAtlasNDist_triangle
     (hs : ∀ i, 0 < scale i) (hw : ∀ i, 0 ≤ weight i) (p q r : X) :
     satAtlasNDist scale weight p r ≤
